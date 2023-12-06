@@ -3,44 +3,37 @@ package org.example.adventofcode;
 import java.io.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
+import utilities.FileReader;
 public class Day1 {
-    public static void main(String[] args) {
-        //Creating instance to avoid static member methods
-        Day1 app = new Day1();
-        List<String> arrayList = new ArrayList<>();
+    public static void main(String[] args){
+        List<String> inputList = new ArrayList<>();
+        FileReader fileReader = new FileReader();
 
-        InputStream is = app.getFileFromResourceAsStream("day1Input.txt");
-        try (InputStreamReader streamReader =
+        try ( InputStream is =
+                      fileReader.getFileFromResourceAsStream("day1Input.txt");
+              InputStreamReader streamReader =
                      new InputStreamReader(is, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(streamReader)) {
+             BufferedReader reader =
+                      new BufferedReader(streamReader)) {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                arrayList.add(line);
+                inputList.add(line);
             }
-            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
         Long sum = 0L;
         int counter = 1;
-        for (String chain: arrayList  ) {
+        for (String chain: inputList  ) {
             sum += getCalibrationValues(chain, counter++);
         }
         System.out.println("Result:" + sum);
     }
 
-    private InputStream getFileFromResourceAsStream(String fileName) {
-        InputStream ioStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream(fileName);
 
-        if (ioStream == null) {
-            throw new IllegalArgumentException(fileName + " is not found");
-        }
-        return ioStream;
-    }
 
     private static int getCalibrationValues(String chain, int counter) {
         String sanitizeChain = sanitizeString(chain);
